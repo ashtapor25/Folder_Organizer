@@ -12,15 +12,32 @@ class Connect_Request_Details():
 
     def __init__(self, file_input):
 
-        wb = load_workbook(filename = file_input)
+        self.engagement = self.get_engagement_name(file_input)
+        self.pathdict = self.generate_pathdict(file_input)
 
-        sheet_ranges = wb['Documents']
+        return
 
-        self.engagement = sheet_ranges['A8'].value
+    def get_engagement_name(self, filename, sheetname="Documents", name_position="A8"):
 
-        self.pathdict = dict()
+        wb = load_workbook(filename)
 
-        curr_row = 7
+        sheet_ranges = wb[sheetname]
+
+        engagement_name = sheet_ranges[name_position].value
+
+        return engagement_name
+
+    # REQUIRES: Request ID and Custom Groups are in the following columns in the xlsx input file
+    # Request ID - B / Custom Group 1 - C / Custom Group 2 - D / Custom Group 3 - E
+    def generate_pathdict(self, filename, sheetname="Documents", start_row=7):
+
+        wb = load_workbook(filename)
+
+        sheet_ranges = wb[sheetname]
+
+        pathdict = dict()
+
+        curr_row = start_row
 
         while True:
 
@@ -44,14 +61,14 @@ class Connect_Request_Details():
                 if comp != None:
                     midpath = os.path.join(midpath, self._sanitize_group_name(comp))
 
-            if ReqID not in self.pathdict:
-                self.pathdict[ReqID] = midpath
+            if ReqID not in pathdict:
+                pathdict[ReqID] = midpath
 
             curr_row += 1
 
-        self.pathdict[0] = ""
+        pathdict[0] = ""
 
-        return
+        return pathdict
 
     @classmethod
     def _sanitize_group_name(cls, groupname):
