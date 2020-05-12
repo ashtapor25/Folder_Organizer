@@ -198,8 +198,8 @@ class ZipfileLongPaths(zipfile.ZipFile):
 
         return targetpath
 
-    def extract_ET_name(self):
-        self.extractall(self.engagement+"/")
+    def extract_ET_name(self, targetpath):
+        self.extractall(targetpath+"/"+self.engagement+"/")
 
 
 # zip_name = "Connect Document Export - 13.Apr.2020_Response Docs.zip"

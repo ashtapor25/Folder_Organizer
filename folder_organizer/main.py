@@ -1,5 +1,6 @@
 # main.py
 
+import os
 import sys
 from folder_organizer.core import ZipfileLongPaths
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QLineEdit, QLabel, QMessageBox
@@ -89,8 +90,10 @@ class MyApp(QWidget):
         zip_url = self.zip_input_qle.text()
         xlsx_url = self.xlsx_input_qle.text()
 
+        (zip_location, zip_filename) = os.path.split(zip_url)
+
         self.instance = ZipfileLongPaths(zip_url, 'r', xlsx_url)
-        self.instance.extract_ET_name()
+        self.instance.extract_ET_name(zip_location)
 
         reply = QMessageBox.question(self, 'Message', 'Connect Zip Organizing Finished', QMessageBox.Yes, QMessageBox.Yes)
 
